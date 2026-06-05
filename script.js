@@ -15,6 +15,7 @@ let lastX = 0;
 let velocity = 0;
 let inertiaId = null;
 let lastMoveTime = 0;
+let dragAccumulator = 0;
 
 const sensitivity = 5; // чем меньше число, тем быстрее вращение
 
@@ -49,10 +50,14 @@ function render() {
 }
 
 function moveViewer(deltaX) {
-  const frameDelta = Math.trunc(deltaX / sensitivity);
+  dragAccumulator += deltaX;
 
-  if (frameDelta !== 0) {
+  if (Math.abs(dragAccumulator) >= sensitivity) {
+    const frameDelta = Math.trunc(dragAccumulator / sensitivity);
+
     currentIndex = normalizeIndex(currentIndex + frameDelta);
+    dragAccumulator = dragAccumulator % sensitivity;
+
     render();
   }
 }
@@ -62,6 +67,7 @@ canvas.addEventListener("pointerdown", (e) => {
   startX = e.clientX;
   lastX = e.clientX;
   lastMoveTime = performance.now();
+  dragAccumulator = 0;
 
   if (inertiaId) {
     cancelAnimationFrame(inertiaId);
@@ -99,7 +105,7 @@ canvas.addEventListener("pointercancel", () => {
 });
 
 function startInertia() {
-  let inertiaVelocity = velocity * 4;
+  let inertiaVelocity = velocity * 10;
 
   function step() {
     if (Math.abs(inertiaVelocity) < 0.1) {
@@ -108,7 +114,7 @@ function startInertia() {
     }
 
     moveViewer(inertiaVelocity);
-    inertiaVelocity *= 0.95;
+    inertiaVelocity *= 0.94;
 
     inertiaId = requestAnimationFrame(step);
   }
