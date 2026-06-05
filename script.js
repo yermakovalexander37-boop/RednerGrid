@@ -13,7 +13,7 @@ let isDragging = false;
 let startX = 0;
 let lastX = 0;
 
-const sensitivity = 5; // чем меньше число, тем быстрее вращение
+const sensitivity = 10; // чем меньше число, тем быстрее вращение
 
 
 for (let i = 0; i < frameCount; i++) {
