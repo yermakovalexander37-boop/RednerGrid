@@ -12,8 +12,11 @@ let currentIndex = 0;
 let isDragging = false;
 let startX = 0;
 let lastX = 0;
+let velocity = 0;
+let inertiaId = null;
+let lastMoveTime = 0;
 
-const sensitivity = 10; // чем меньше число, тем быстрее вращение
+const sensitivity = 5; // чем меньше число, тем быстрее вращение
 
 
 for (let i = 0; i < frameCount; i++) {
@@ -46,7 +49,7 @@ function render() {
 }
 
 function moveViewer(deltaX) {
-  const frameDelta = Math.round(deltaX / sensitivity);
+  const frameDelta = Math.trunc(deltaX / sensitivity);
 
   if (frameDelta !== 0) {
     currentIndex = normalizeIndex(currentIndex + frameDelta);
@@ -58,25 +61,57 @@ canvas.addEventListener("pointerdown", (e) => {
   isDragging = true;
   startX = e.clientX;
   lastX = e.clientX;
+  lastMoveTime = performance.now();
+
+  if (inertiaId) {
+    cancelAnimationFrame(inertiaId);
+    inertiaId = null;
+  }
+
   canvas.setPointerCapture(e.pointerId);
 });
 
 canvas.addEventListener("pointermove", (e) => {
   if (!isDragging) return;
 
+  const now = performance.now();
   const deltaX = e.clientX - lastX;
+  const deltaTime = now - lastMoveTime || 16;
+
+  velocity = deltaX / deltaTime;
 
   if (Math.abs(deltaX) >= sensitivity) {
     moveViewer(deltaX);
     lastX = e.clientX;
   }
+
+  lastMoveTime = now;
 });
 
 canvas.addEventListener("pointerup", (e) => {
   isDragging = false;
   canvas.releasePointerCapture(e.pointerId);
+  startInertia();
 });
 
 canvas.addEventListener("pointercancel", () => {
   isDragging = false;
 });
+
+function startInertia() {
+  let inertiaVelocity = velocity * 4;
+
+  function step() {
+    if (Math.abs(inertiaVelocity) < 0.1) {
+      inertiaId = null;
+      return;
+    }
+
+    moveViewer(inertiaVelocity);
+    inertiaVelocity *= 0.95;
+
+    inertiaId = requestAnimationFrame(step);
+  }
+
+  step();
+}
