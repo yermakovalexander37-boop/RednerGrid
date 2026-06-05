@@ -5,7 +5,7 @@ const context = canvas.getContext("2d");
 
 const frameCount = 53; // поменять на свое количество кадров
 const currentFrame = index =>
-  `frames/frame_${String(index + 1).padStart(4, "0")}.jpg`;
+  `Frames/frame_${String(index + 1).padStart(4, "0")}.jpg`;
 
 const images = [];
 const sequence = { frame: 0 };
