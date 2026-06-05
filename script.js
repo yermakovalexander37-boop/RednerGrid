@@ -121,3 +121,18 @@ function startInertia() {
 
   step();
 }
+
+const fullscreenBtn = document.getElementById("fullscreenBtn");
+const viewer = document.querySelector(".viewer");
+
+fullscreenBtn.addEventListener("click", () => {
+  if (!document.fullscreenElement) {
+    viewer.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+});
+
+document.addEventListener("fullscreenchange", () => {
+  render();
+});
