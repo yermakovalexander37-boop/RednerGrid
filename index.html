@@ -1,45 +1,19 @@
-body {
-  margin: 0;
-  background: #111;
-  overflow: hidden;
-  font-family: Arial, sans-serif;
-}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>360 Viewer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
 
-.viewer {
-  width: 100vw;
-  height: 100dvh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+<div class="viewer">
+  <div class="stage">
+    <canvas id="sequence"></canvas>
+    <div class="hint">Потяните мышью или пальцем</div>
+  </div>
+</div>
 
-.stage {
-  position: relative;
-  width: min(100vw, calc(100dvh * 16 / 9));
-  height: min(100dvh, calc(100vw * 9 / 16));
-  touch-action: none;
-  cursor: grab;
-}
-
-.stage:active {
-  cursor: grabbing;
-}
-
-#sequence {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-.hint {
-  position: absolute;
-  left: 50%;
-  bottom: 24px;
-  transform: translateX(-50%);
-  color: white;
-  background: rgba(0,0,0,0.45);
-  padding: 8px 14px;
-  border-radius: 20px;
-  font-size: 14px;
-  pointer-events: none;
-}
+<script src="script.js"></script>
+</body>
+</html>
