@@ -1,24 +1,45 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <title>Gear Scroll Demo</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
+body {
+  margin: 0;
+  background: #111;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
 
-<section class="hero">
-  <div class="viewer">
-    <div class="stage">
-      <canvas id="sequence"></canvas>
-      <div id="hotspots"></div>
-    </div>
-  </div>
-</section>
+.viewer {
+  width: 100vw;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
-<script src="script.js"></script>
+.stage {
+  position: relative;
+  width: min(100vw, calc(100dvh * 16 / 9));
+  height: min(100dvh, calc(100vw * 9 / 16));
+  touch-action: none;
+  cursor: grab;
+}
 
-</body>
-</html>
+.stage:active {
+  cursor: grabbing;
+}
+
+#sequence {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.hint {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  color: white;
+  background: rgba(0,0,0,0.45);
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  pointer-events: none;
+}
